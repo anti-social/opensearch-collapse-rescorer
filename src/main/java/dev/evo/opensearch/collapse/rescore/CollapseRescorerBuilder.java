@@ -16,24 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package dev.evo.elasticsearch.collapse.rescore;
+package dev.evo.opensearch.collapse.rescore;
 
 import org.apache.lucene.search.Sort;
-import org.elasticsearch.common.ParseField;
-import org.elasticsearch.common.ParsingException;
-import org.elasticsearch.common.io.stream.StreamInput;
-import org.elasticsearch.common.io.stream.StreamOutput;
-import org.elasticsearch.common.xcontent.ConstructingObjectParser;
-import org.elasticsearch.common.xcontent.ObjectParser;
-import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.common.xcontent.XContentParser;
-import org.elasticsearch.index.query.QueryRewriteContext;
-import org.elasticsearch.index.query.SearchExecutionContext;
-import org.elasticsearch.index.query.QueryShardException;
-import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.elasticsearch.search.rescore.RescoreContext;
-import org.elasticsearch.search.rescore.RescorerBuilder;
-import org.elasticsearch.search.sort.SortBuilder;
+import org.opensearch.core.ParseField;
+import org.opensearch.core.common.ParsingException;
+import org.opensearch.core.common.io.stream.StreamInput;
+import org.opensearch.core.common.io.stream.StreamOutput;
+import org.opensearch.core.xcontent.ConstructingObjectParser;
+import org.opensearch.core.xcontent.ObjectParser;
+import org.opensearch.core.xcontent.XContentBuilder;
+import org.opensearch.core.xcontent.XContentParser;
+import org.opensearch.index.query.QueryRewriteContext;
+import org.opensearch.index.query.QueryShardContext;
+import org.opensearch.index.query.QueryShardException;
+import org.opensearch.search.builder.SearchSourceBuilder;
+import org.opensearch.search.rescore.RescoreContext;
+import org.opensearch.search.rescore.RescorerBuilder;
+import org.opensearch.search.sort.SortBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -131,7 +131,7 @@ public class CollapseRescorerBuilder extends RescorerBuilder<CollapseRescorerBui
 
     @Override
     protected RescoreContext innerBuildContext(
-        int windowSize, SearchExecutionContext context
+        int windowSize, QueryShardContext context
     ) throws IOException {
         final var groupFieldType = context.getFieldType(groupField);
         if (groupFieldType == null) {

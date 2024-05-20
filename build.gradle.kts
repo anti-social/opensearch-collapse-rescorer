@@ -1,12 +1,13 @@
 import java.nio.file.Paths
 
 buildscript {
-    val esVersion = project.properties["esVersion"] ?: "7.13.4"
+    val opensearchVersion = project.properties["opensearchVersion"] ?: "2.14.0"
     repositories {
+        mavenLocal()
         mavenCentral()
     }
     dependencies {
-        classpath("org.elasticsearch.gradle:build-tools:$esVersion")
+        classpath("org.opensearch.gradle:build-tools:$opensearchVersion")
     }
 }
 
@@ -14,22 +15,22 @@ plugins {
     java
     idea
     id("org.ajoberstar.grgit") version "4.1.0"
-    id("nebula.ospackage") version "8.5.6"
+    id("com.netflix.nebula.ospackage") version "11.9.0"
 }
 
 apply {
-    plugin("elasticsearch.esplugin")
-    plugin("elasticsearch.testclusters")
+    plugin("opensearch.opensearchplugin")
+    plugin("opensearch.testclusters")
 }
 
-group = "dev.evo.elasticsearch"
+group = "dev.evo.opensearch"
 
 val lastTag = grgit.describe(mapOf("match" to listOf("v*"), "tags" to true)) ?: "v0.0.0"
 val pluginVersion = lastTag.split('-', limit=2)[0].trimStart('v')
-val versions = org.elasticsearch.gradle.VersionProperties.getVersions() as Map<String, String>
-version = "$pluginVersion-es${versions["elasticsearch"]}"
+val versions = org.opensearch.gradle.VersionProperties.getVersions() as Map<String, String>
+version = "$pluginVersion-opensearch${versions["opensearch"]}"
 
-val distDir = Paths.get(buildDir.path, "distributions")
+val distDir = Paths.get(project.layout.buildDirectory.toString(), "distributions")
 
 repositories {
     mavenCentral()
@@ -39,29 +40,31 @@ dependencies {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_13
+    sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
 }
 
 val pluginName = "collapse-extension"
 
-configure<org.elasticsearch.gradle.plugin.PluginPropertiesExtension> {
+configure<org.opensearch.gradle.plugin.PluginPropertiesExtension> {
     name = pluginName
     description = "Adds rescorer for mixing up search hits inside their groups."
-    classname = "dev.evo.elasticsearch.collapse.CollapseRescorePlugin"
+    classname = "dev.evo.opensearch.collapse.CollapseRescorePlugin"
     version = project.version.toString()
     licenseFile = project.file("LICENSE.txt")
     noticeFile = project.file("NOTICE.txt")
 }
 
-configure<NamedDomainObjectContainer<org.elasticsearch.gradle.testclusters.ElasticsearchCluster>> {
+configure<NamedDomainObjectContainer<org.opensearch.gradle.testclusters.OpenSearchCluster>> {
     val integTestCluster = create("integTest") {
-        setTestDistribution(org.elasticsearch.gradle.testclusters.TestDistribution.DEFAULT)
+        setTestDistribution(org.opensearch.gradle.testclusters.TestDistribution.INTEG_TEST)
+        // setTestDistribution(org.opensearch.gradle.testclusters.TestDistribution.ARCHIVE)
         numberOfNodes = 2
+        // module("")
         plugin(tasks.named<Zip>("bundlePlugin").get().archiveFile)
     }
 
-    val integTestTask = tasks.register<org.elasticsearch.gradle.test.RestIntegTestTask>("integTest") {
+    val integTestTask = tasks.register<org.opensearch.gradle.test.RestIntegTestTask>("integTest") {
         dependsOn("bundlePlugin")
     }
 
@@ -70,24 +73,31 @@ configure<NamedDomainObjectContainer<org.elasticsearch.gradle.testclusters.Elast
     }
 }
 
-tasks.named("validateElasticPom") {
-    enabled = false
-}
-
-tasks.named("assemble") {
-    dependsOn("deb")
+tasks.register("listRepos") {
+    doLast {
+        println("Repositories:")
+        project.repositories.forEach {
+            print("- ")
+            if (it is MavenArtifactRepository) {
+                println("Name: ${it.name}; url: ${it.url}")
+            } else if (it is IvyArtifactRepository) {
+                println("Name: ${it.name}; url: ${it.url}")
+            } else {
+                println("Unknown repository type: $it")
+            }
+        }
+    }
 }
 
 tasks.register("deb", com.netflix.gradle.plugins.deb.Deb::class) {
     dependsOn("bundlePlugin")
 
     packageName = project.name
-    requires("elasticsearch", versions["elasticsearch"])
-        .or("elasticsearch-oss", versions["elasticsearch"])
+    requires("opensearch", versions["opensearch"])
 
     from(zipTree(tasks["bundlePlugin"].outputs.files.singleFile))
 
-    val esHome = project.properties["esHome"] ?: "/usr/share/elasticsearch"
+    val esHome = project.properties["opensearchHome"] ?: "/usr/share/opensearch"
     into("$esHome/plugins/${pluginName}")
 
     doLast {

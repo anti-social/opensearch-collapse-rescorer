@@ -1,2 +1,1 @@
-rootProject.name = "elasticsearch-collapse-extension"
-
+rootProject.name = "opensearch-collapse-extension"

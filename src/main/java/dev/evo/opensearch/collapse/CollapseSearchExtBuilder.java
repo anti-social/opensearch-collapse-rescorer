@@ -16,20 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package dev.evo.elasticsearch.collapse;
+package dev.evo.opensearch.collapse;
 
-import org.elasticsearch.common.ParseField;
-import org.elasticsearch.common.io.stream.StreamInput;
-import org.elasticsearch.common.io.stream.StreamOutput;
-import org.elasticsearch.common.xcontent.ConstructingObjectParser;
-import org.elasticsearch.common.xcontent.ObjectParser;
-import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.common.xcontent.XContentParser;
-import org.elasticsearch.search.SearchExtBuilder;
-import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.elasticsearch.search.sort.FieldSortBuilder;
-import org.elasticsearch.search.sort.ScriptSortBuilder;
-import org.elasticsearch.search.sort.SortBuilder;
+import org.opensearch.core.ParseField;
+import org.opensearch.core.common.io.stream.StreamInput;
+import org.opensearch.core.common.io.stream.StreamOutput;
+import org.opensearch.core.xcontent.ConstructingObjectParser;
+import org.opensearch.core.xcontent.ObjectParser;
+import org.opensearch.core.xcontent.XContentBuilder;
+import org.opensearch.core.xcontent.XContentParser;
+import org.opensearch.search.SearchExtBuilder;
+import org.opensearch.search.builder.SearchSourceBuilder;
+import org.opensearch.search.sort.FieldSortBuilder;
+import org.opensearch.search.sort.ScriptSortBuilder;
+import org.opensearch.search.sort.SortBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -160,7 +160,7 @@ public class CollapseSearchExtBuilder extends SearchExtBuilder {
 
     @Override
     public XContentBuilder toXContent(XContentBuilder builder, Params params) throws IOException {
-        builder.startObject(NAME);
+        builder.startObject(getWriteableName());
         builder.field(GROUP_FIELD_NAME.getPreferredName(), groupField);
         builder.field(WINDOW_SIZE_FIELD_NAME.getPreferredName(), windowSize);
         builder.field(SHARD_SIZE_FIELD_NAME.getPreferredName(), shardSize);

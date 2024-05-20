@@ -16,30 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package dev.evo.elasticsearch.collapse;
+package dev.evo.opensearch.collapse;
 
-import dev.evo.elasticsearch.collapse.rescore.CollapseRescorerBuilder;
+import dev.evo.opensearch.collapse.rescore.CollapseRescorerBuilder;
 import org.apache.lucene.search.TotalHits;
-import org.elasticsearch.action.ActionListener;
-import org.elasticsearch.action.ActionRequest;
-import org.elasticsearch.action.ActionResponse;
-import org.elasticsearch.action.search.SearchAction;
-import org.elasticsearch.action.search.SearchRequest;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.support.ActionFilter;
-import org.elasticsearch.action.support.ActionFilterChain;
-import org.elasticsearch.common.settings.Setting;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.aggregations.InternalAggregations;
-import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.elasticsearch.search.internal.InternalSearchResponse;
-import org.elasticsearch.search.profile.SearchProfileShardResults;
-import org.elasticsearch.search.sort.FieldSortBuilder;
-import org.elasticsearch.search.sort.ScriptSortBuilder;
-import org.elasticsearch.search.sort.SortOrder;
-import org.elasticsearch.tasks.Task;
+import org.opensearch.action.ActionRequest;
+import org.opensearch.action.search.SearchAction;
+import org.opensearch.action.search.SearchRequest;
+import org.opensearch.action.search.SearchResponse;
+import org.opensearch.action.support.ActionFilter;
+import org.opensearch.action.support.ActionFilterChain;
+import org.opensearch.common.settings.Setting;
+import org.opensearch.common.settings.Settings;
+import org.opensearch.core.action.ActionListener;
+import org.opensearch.core.action.ActionResponse;
+import org.opensearch.search.SearchHit;
+import org.opensearch.search.SearchHits;
+import org.opensearch.search.aggregations.InternalAggregations;
+import org.opensearch.search.builder.SearchSourceBuilder;
+import org.opensearch.search.internal.InternalSearchResponse;
+import org.opensearch.search.profile.SearchProfileShardResults;
+import org.opensearch.search.sort.FieldSortBuilder;
+import org.opensearch.search.sort.ScriptSortBuilder;
+import org.opensearch.search.sort.SortOrder;
+import org.opensearch.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -140,8 +140,8 @@ public class CollapseRescoreFilter implements ActionFilter {
             }
 
             // We cannot return a group sort value within search docs due to next check:
-            // https://github.com/elastic/elasticsearch/blob/v6.8.13/
-            // server/src/main/java/org/elasticsearch/search/query/QuerySearchResult.java#L130
+            // https://github.com/opensearch-project/OpenSearch/blob/v6.8.13/
+            // server/src/main/java/org/opensearch/search/query/QuerySearchResult.java#L130
             // So we will calculate it one more time as a script field
             if (sort instanceof FieldSortBuilder) {
                 final var fieldSort = (FieldSortBuilder) sort;

@@ -16,16 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package dev.evo.elasticsearch.collapse;
+package dev.evo.opensearch.collapse;
 
-import dev.evo.elasticsearch.collapse.rescore.CollapseRescorerBuilder;
+import dev.evo.opensearch.collapse.rescore.CollapseRescorerBuilder;
 
-import org.elasticsearch.action.support.ActionFilter;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.plugins.ActionPlugin;
-import org.elasticsearch.plugins.Plugin;
-import org.elasticsearch.plugins.SearchPlugin;
+import org.opensearch.action.support.ActionFilter;
+import org.opensearch.common.settings.Settings;
+import org.opensearch.plugins.ActionPlugin;
+import org.opensearch.plugins.Plugin;
+import org.opensearch.plugins.SearchPlugin;
+import org.opensearch.search.SearchExtBuilder;
 
+import java.util.Collections;
 import java.util.List;
 
 public class CollapseRescorePlugin extends Plugin implements ActionPlugin, SearchPlugin {

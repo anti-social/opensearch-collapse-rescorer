@@ -16,18 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package dev.evo.elasticsearch.collapse.rescore;
+package dev.evo.opensearch.collapse.rescore;
 
 import org.apache.lucene.search.Explanation;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Pruning;
 import org.apache.lucene.search.Scorable;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.util.BytesRef;
-import org.elasticsearch.index.fielddata.IndexFieldData;
-import org.elasticsearch.search.rescore.RescoreContext;
-import org.elasticsearch.search.rescore.Rescorer;
+import org.opensearch.index.fielddata.IndexFieldData;
+import org.opensearch.search.rescore.RescoreContext;
+import org.opensearch.search.rescore.Rescorer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -112,7 +113,7 @@ public class CollapseRescorer implements Rescorer {
         final var sortFields = ctx.sort.getSort();
         final var sortField = sortFields[0];
         final var reverseMul = sortField.getReverse() ? -1 : 1;
-        final var comparator = sortField.getComparator(hits.length, 0);
+        final var comparator = sortField.getComparator(hits.length, Pruning.NONE);
         final var docScorer = new Scorable() {
             private int doc;
             private float score;
@@ -191,7 +192,7 @@ public class CollapseRescorer implements Rescorer {
                         top.slot = slot;
                     }
                     if (hit.score > top.score) {
-                        // Elasticsearch requires scores to be non-decreasing
+                        // Opensearch requires scores to be non-decreasing
                         // Replace top document's score if new score is greater then current
                         top.score = hit.score;
                     }
@@ -209,7 +210,7 @@ public class CollapseRescorer implements Rescorer {
         final var numHits = Math.min(collapsedHits.size(), ctx.shardSize);
         final var trimmedHits = collapsedHits.stream()
             .limit(numHits)
-            // Elasticsearch requires only `ScoreDoc` objects in `TopDocs`.
+            // Opensearch requires only `ScoreDoc` objects in `TopDocs`.
             // It would be nice to find a way to pass `FieldDoc`s here
             // but it is not possible at the moment
             // as it requires also to pass `DocValueFormat[]` somehow
