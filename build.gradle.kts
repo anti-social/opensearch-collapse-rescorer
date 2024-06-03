@@ -26,7 +26,7 @@ apply {
 group = "dev.evo.opensearch"
 
 val lastTag = grgit.describe(mapOf("match" to listOf("v*"), "tags" to true)) ?: "v0.0.0"
-val pluginVersion = lastTag.split('-', limit=2)[0].trimStart('v')
+val pluginVersion = lastTag.trimStart('v')
 val versions = org.opensearch.gradle.VersionProperties.getVersions() as Map<String, String>
 version = "$pluginVersion-opensearch${versions["opensearch"]}"
 
