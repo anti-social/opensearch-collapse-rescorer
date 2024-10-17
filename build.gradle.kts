@@ -1,7 +1,7 @@
 import java.nio.file.Paths
 
 buildscript {
-    val opensearchVersion = project.properties["opensearchVersion"] ?: "2.14.0"
+    val opensearchVersion = project.properties["opensearchVersion"] ?: "2.17.0"
     repositories {
         mavenLocal()
         mavenCentral()
