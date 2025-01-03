@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: anti-social/elasticsearch-plugin-github-action/build@v1.0.2
       with:
-        os-version: '2.17'
+        os-version: '2.18'
 
   release:
     runs-on: ubuntu-latest
