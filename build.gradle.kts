@@ -2,12 +2,13 @@ plugins {
     java
     idea
     id("opensearch.opensearchplugin")
+    id("opensearch.java-agent")
     id("com.netflix.nebula.ospackage")
 }
 
 configure<JavaPluginExtension> {
-    sourceCompatibility = JavaVersion.VERSION_15
-    targetCompatibility = JavaVersion.VERSION_15
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 configureOpensearchPlugin(
