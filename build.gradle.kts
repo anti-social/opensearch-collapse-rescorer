@@ -5,6 +5,11 @@ plugins {
     id("com.netflix.nebula.ospackage")
 }
 
+configure<JavaPluginExtension> {
+    sourceCompatibility = JavaVersion.VERSION_15
+    targetCompatibility = JavaVersion.VERSION_15
+}
+
 configureOpensearchPlugin(
     name = "collapse-extension",
     description = "Adds rescorer for mixing up search hits inside their groups.",
