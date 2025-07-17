@@ -3,7 +3,7 @@ name: Java CI
 on:
   push:
     branches:
-    - '**'
+    - 'master'
     tags:
     - 'v*'
   pull_request:
@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: anti-social/elasticsearch-plugin-github-action/build@v1.0.2
+    - uses: anti-social/elasticsearch-plugin-github-action/build@v1.0.3
       with:
         os-version: '2.18'
 
@@ -26,4 +26,4 @@ jobs:
     permissions:
       contents: write
     steps:
-    - uses: anti-social/elasticsearch-plugin-github-action/release@v1.0.2
+    - uses: anti-social/elasticsearch-plugin-github-action/release@v1.0.3
