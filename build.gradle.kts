@@ -16,6 +16,9 @@ configureOpensearchPlugin(
     description = "Adds rescorer for mixing up search hits inside their groups.",
     classname = "dev.evo.opensearch.collapse.CollapseRescorePlugin",
     numberOfTestClusterNodes = 2,
+    // Compatibility between MINOR update is not working at the moment:
+    // https://github.com/opensearch-project/OpenSearch/issues/18787
+    opensearchCompatibility = OpensearchCompatibility.REVISION,
 )
 
 version = Versions.project
