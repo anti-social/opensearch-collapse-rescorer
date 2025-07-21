@@ -89,7 +89,7 @@ public class CollapseRescorer implements Rescorer {
         TopDocs topDocs, IndexSearcher searcher, RescoreContext rescoreContext
     ) throws IOException {
         final var ctx = (Context) rescoreContext;
-        if (topDocs == null || topDocs.totalHits.value == 0 || topDocs.scoreDocs.length == 0) {
+        if (topDocs == null || topDocs.totalHits.value() == 0 || topDocs.scoreDocs.length == 0) {
             return topDocs;
         }
 
@@ -124,11 +124,6 @@ public class CollapseRescorer implements Rescorer {
 
             public void setScore(float score) {
                 this.score = score;
-            }
-
-            @Override
-            public int docID() {
-                return doc;
             }
 
             @Override
