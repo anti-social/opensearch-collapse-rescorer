@@ -13,7 +13,7 @@ configure<JavaPluginExtension> {
 
 configureOpensearchPlugin(
     name = "collapse-extension",
-    description = "Adds rescorer for mixing up search hits inside their groups.",
+    description = "Adds rescorer for collapsing search hits",
     classname = "dev.evo.opensearch.collapse.CollapseRescorePlugin",
     numberOfTestClusterNodes = 2,
     // Compatibility between MINOR update is not working at the moment:
